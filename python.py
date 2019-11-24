@@ -18,7 +18,9 @@ yValue = 0
 score = 0
 snake = None
 food = None
+direction = "d"
 
+'''
 #assign the variables for the height and the width
 try:
     heightChosen = int(input("choose a length for your canvas between 10 and 50: "))
@@ -33,6 +35,9 @@ while(heightChosen < 10 or heightChosen > 50):
     
     except:
         print("ensure you enter a number")
+'''
+
+heightChosen = 30
 
 #function to place the food in the canvas
 def placeFood():
@@ -53,34 +58,38 @@ def moveFood():
 def placeSnake():
     global xSnake, ySnake, heightChosen, snake
     startPosition = math.floor(heightChosen / 2) * snakeSize
-    xSnake = startPosition
-    ySnake = startPosition
+    xSnake = startPosition + 2
+    ySnake = startPosition + 2
     snake = canvas.create_rectangle(xSnake, ySnake, xSnake + snakeSize, ySnake + snakeSize, fill="white")
 
 #move the snake of the head depending on the direction
 def up():
     global xSnake, ySnake, snake
-    ySnake = ySnake - snakeSize
+    ySnake = (ySnake - snakeSize) % (snakeSize * heightChosen)
     canvas.delete(snake)
     snake = canvas.create_rectangle(xSnake, ySnake , xSnake + snakeSize, ySnake + snakeSize, fill="white")
+    direction = "u"
 
 def down():
     global xSnake, ySnake, snake
-    ySnake = ySnake + snakeSize
+    ySnake = (ySnake + snakeSize) % (snakeSize * heightChosen)
     canvas.delete(snake)
     snake = canvas.create_rectangle(xSnake, ySnake , xSnake + snakeSize, ySnake + snakeSize, fill="white")
+    direction = "d"
 
 def left():
     global xSnake, ySnake, snake
-    xSnake = xSnake - snakeSize
+    xSnake = (xSnake - snakeSize) % (snakeSize * heightChosen)
     canvas.delete(snake)
     snake = canvas.create_rectangle(xSnake, ySnake , xSnake + snakeSize, ySnake + snakeSize, fill="white")
+    direction = "l"
 
 def right():
     global xSnake, ySnake, snake
-    xSnake = xSnake + snakeSize
+    xSnake = (xSnake + snakeSize) % (snakeSize * heightChosen)
     canvas.delete(snake)
     snake = canvas.create_rectangle(xSnake, ySnake , xSnake + snakeSize, ySnake + snakeSize, fill="white")
+    direction = "r"
 
 #decide where the snake goes depending on input
 def move(inp):
@@ -96,7 +105,8 @@ def move(inp):
  
 #create the canvas
 main = Tk()
-canvas = Canvas(main, width = heightChosen * snakeSize, height = heightChosen * snakeSize, background = '#34eba4')
+main.title("snake game")
+canvas = Canvas(main, width = heightChosen * snakeSize + 2, height = heightChosen * snakeSize + 2, background = '#34eba4')
 canvas.pack()
 placeSnake()
 placeFood()
